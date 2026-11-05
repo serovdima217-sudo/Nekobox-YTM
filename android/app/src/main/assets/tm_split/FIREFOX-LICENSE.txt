@@ -1,0 +1,7 @@
+Индикатор взят из исходников Mozilla Firefox.
+Источник: https://github.com/mozilla/gecko-dev/blob/master/browser/themes/shared/tabbrowser/loading.svg
+Анимация: browser/themes/shared/tabbrowser/tabs.css, tab-throbber-animation.
+30 кадров, 1,05 секунды на цикл. Геометрия исходного SVG не изменена.
+SVG и производные векторные кадры распространяются по Mozilla Public License 2.0.
+Полный текст лицензии: https://www.mozilla.org/MPL/2.0/
+Векторные кадры адаптированы к Android VectorDrawable; размер увеличен равномерно.

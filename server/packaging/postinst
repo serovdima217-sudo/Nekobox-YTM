@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+if command -v systemd-sysusers >/dev/null 2>&1; then
+ systemd-sysusers /usr/lib/sysusers.d/splitytm.conf
+fi
+if [ -d /etc/splitytm ] && getent group splitytm >/dev/null; then
+ chown root:splitytm /etc/splitytm
+ chmod 0750 /etc/splitytm
+ if [ -f /etc/splitytm/server.json ]; then
+  chown root:splitytm /etc/splitytm/server.json
+  chmod 0640 /etc/splitytm/server.json
+ fi
+fi
+if [ -d /run/systemd/system ]; then systemctl daemon-reload || true; fi
+# Служба намеренно не запускается и не перезапускается при установке/обновлении.

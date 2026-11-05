@@ -1,0 +1,46 @@
+[
+  {
+    "component": "skiko",
+    "commit": "9a5b398bb2044fff7e7a84fbfd6f4b803e4427c0",
+    "url": "https://codeload.github.com/JetBrains/skiko/tar.gz/9a5b398bb2044fff7e7a84fbfd6f4b803e4427c0",
+    "archive_sha256": "53361af6e70f92b6d2eba2a09619921c67b8861eda5ab12394455c7c70b86fd6",
+    "modified_files": [
+      "skiko/buildSrc/src/main/kotlin/SkiaTarget.kt",
+      "skiko/buildSrc/src/main/kotlin/properties.kt",
+      "skiko/buildSrc/src/main/kotlin/tasks/configuration/JvmTasksConfiguration.kt",
+      "skiko/src/awtMain/cpp/include/jni_helpers.h",
+      "skiko/src/commonMain/kotlin/org/jetbrains/skiko/OsArch.kt",
+      "skiko/src/jvmMain/kotlin/org/jetbrains/skiko/OsArch.jvm.kt"
+    ]
+  },
+  {
+    "component": "skia",
+    "commit": "22f58c9fd43d55bde818821c04b48fda5d7ec939",
+    "url": "https://codeload.github.com/JetBrains/skia/tar.gz/22f58c9fd43d55bde818821c04b48fda5d7ec939",
+    "archive_sha256": "33e5a5a70de90bce47a80bb3989eda94902d82996408360c67faf43196940813",
+    "modified_files": []
+  },
+  {
+    "component": "openjfx",
+    "commit": "5497f2f46abff58bea405b310fb6c9670686709e",
+    "url": "https://codeload.github.com/openjdk/jfx21u/tar.gz/5497f2f46abff58bea405b310fb6c9670686709e",
+    "archive_sha256": "eebc157dd599f1dc9be9be415d5b94634a2905230d85d78cf13149d777084724",
+    "modified_files": [
+      "build.gradle",
+      "buildSrc/linux.gradle",
+      "modules/javafx.graphics/src/main/native-font/freetype.c",
+      "modules/javafx.graphics/src/main/native-font/pango.c",
+      "modules/javafx.graphics/src/main/native-glass/gtk/GlassApplication.cpp",
+      "modules/javafx.graphics/src/main/native-glass/gtk/glass_dnd.cpp",
+      "modules/javafx.graphics/src/main/native-glass/gtk/glass_key.cpp",
+      "modules/javafx.graphics/src/main/native-glass/gtk/glass_window.h",
+      "modules/javafx.graphics/src/main/native-glass/gtk/glass_window_ime.cpp",
+      "modules/javafx.graphics/src/main/native-prism-es2/x11/X11GLContext.c",
+      "modules/javafx.web/src/main/native/Source/cmake/OptionsJava.cmake",
+      "modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gst_private.h",
+      "modules/javafx.media/src/main/native/gstreamer/plugins/av/videodecoder.c",
+      "modules/javafx.web/src/main/native/Source/WebCore/mapfile-vers",
+      "modules/javafx.web/src/main/native/Source/WebKitLegacy/java/WebCoreSupport/FrameLoaderClientJava.cpp"
+    ]
+  }
+]

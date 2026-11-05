@@ -1,0 +1,35 @@
+buildscript {
+ repositories { maven { url = System.getenv('BUILD_REPOSITORY') ? System.getenv('BUILD_REPOSITORY') + '/central' : 'https://repo.maven.apache.org/maven2'; allowInsecureProtocol = true } }
+ dependencies {
+  classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.21'
+  classpath 'org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.3.21'
+  classpath 'org.jetbrains.compose:compose-gradle-plugin:1.11.1'
+ }
+}
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+apply plugin: 'org.jetbrains.compose'
+repositories {
+ maven { url = System.getenv('BUILD_REPOSITORY') ? System.getenv('BUILD_REPOSITORY') + '/central' : 'https://repo.maven.apache.org/maven2'; allowInsecureProtocol = true }
+ maven { url = System.getenv('BUILD_REPOSITORY') ? System.getenv('BUILD_REPOSITORY') + '/google' : 'https://dl.google.com/dl/android/maven2'; allowInsecureProtocol = true }
+}
+kotlin { jvmToolchain(21) }
+dependencies {
+ implementation compose.desktop.currentOs
+ implementation compose.material
+ implementation files('libs/zxing-core-3.5.3.jar')
+ implementation 'org.openjfx:jdk-jsobject:25.0.5'
+ ['base','graphics','controls','media','swing','web'].each { module -> implementation("org.openjfx:javafx-${module}:25.0.5:linux") { transitive = false } }
+ implementation 'com.google.code.gson:gson:2.9.0'
+ implementation 'com.esotericsoftware:kryo:5.2.1'
+ implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
+ implementation 'org.yaml:snakeyaml:1.30'
+ implementation 'org.ini4j:ini4j:0.5.4'
+ implementation 'org.json:json:20240303'
+ implementation 'org.jetbrains:annotations:24.1.0'
+ implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2'
+ implementation 'org.xerial:sqlite-jdbc:3.50.3.0'
+ testImplementation 'junit:junit:4.13.2'
+}
+compose.desktop { application { mainClass = 'io.nekohasekai.sagernet.linux.MainKt' } }
+tasks.register('runtimeJars', Sync) { from configurations.runtimeClasspath; into layout.projectDirectory.dir('runtime-jars') }

@@ -1,0 +1,25 @@
+{
+  "clients": 5,
+  "links": [
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000001",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000002",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000003",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000004",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000005",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000006",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000007",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000008",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000009",
+    "https://telemost.yandex.ru/j/00000000000000000000000000000000000010"
+  ],
+  "cookie_file": "/run/credentials/splitytm-server.service/yandex-cookie",
+  "state_file": "/var/lib/splitytm/rooms.json",
+  "links_file": "/var/lib/splitytm/links.txt",
+  "memory_limit_mib": 150,
+  "primary_fps": 60,
+  "primary_batch": 120,
+  "reserve_fps": 12,
+  "reserve_batch": 40,
+  "join_interval_ms": 100,
+  "retry_interval_seconds": 15
+}

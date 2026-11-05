@@ -1,0 +1,82 @@
+{
+  "upstream": "openjdk/jfx25u",
+  "tag": "25.0.5+1",
+  "commit": "efe71c918f2256bd23bc38389eb759bd4c9cf525",
+  "files": [
+    {
+      "path": "ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/ADDITIONAL_LICENSE_INFO"
+    },
+    {
+      "path": "ASSEMBLY_EXCEPTION",
+      "sha256": "a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/ASSEMBLY_EXCEPTION"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/LICENSE"
+    },
+    {
+      "path": "modules/javafx.graphics/src/main/legal/jpeg_fx.md",
+      "sha256": "4d8164326adbb7c6a3dbb65b1979962915e4b6f67eb5885409c80a3f350b322a",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.graphics/src/main/legal/jpeg_fx.md"
+    },
+    {
+      "path": "modules/javafx.graphics/src/main/legal/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.graphics/src/main/legal/mesa3d.md"
+    },
+    {
+      "path": "modules/javafx.graphics/src/main/legal/pipewire.md",
+      "sha256": "56a8fb1652c70ac204d13bb52ca4d678162e7d21a97d10209c2a633de8082de0",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.graphics/src/main/legal/pipewire.md"
+    },
+    {
+      "path": "modules/javafx.media/src/main/legal/directshow.md",
+      "sha256": "d847da5757a30d093db3f90a0bac9b1699a52965daa3ec5dedf3ebf14c81c698",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.media/src/main/legal/directshow.md"
+    },
+    {
+      "path": "modules/javafx.media/src/main/legal/glib.md",
+      "sha256": "69882471620c3ee7f947f8c2348039cb88448762d363663a0a0d472cc04b7912",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.media/src/main/legal/glib.md"
+    },
+    {
+      "path": "modules/javafx.media/src/main/legal/gstreamer.md",
+      "sha256": "80e6074416857e660fdba10495326e2803082f70f692ee9b08a54d0f532e563c",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.media/src/main/legal/gstreamer.md"
+    },
+    {
+      "path": "modules/javafx.media/src/main/legal/libffi.md",
+      "sha256": "5679f035cd576da7d6304d696823379baeec75740fd9d7c727979dedb249ed28",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.media/src/main/legal/libffi.md"
+    },
+    {
+      "path": "modules/javafx.web/src/main/legal/icu_web.md",
+      "sha256": "6cb104c459520a29c1cbea9893190dd8880c0b5b918f07a93946c593d648d73e",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.web/src/main/legal/icu_web.md"
+    },
+    {
+      "path": "modules/javafx.web/src/main/legal/libxml2.md",
+      "sha256": "547d32e6df34c94cb50e3131fe3956853cc379fa628fd65b540af97ad29917dd",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.web/src/main/legal/libxml2.md"
+    },
+    {
+      "path": "modules/javafx.web/src/main/legal/libxslt.md",
+      "sha256": "fd710f05d5f47725de1a8779be2bd2e28165c5585a7c1971081e5e374649b4c6",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.web/src/main/legal/libxslt.md"
+    },
+    {
+      "path": "modules/javafx.web/src/main/legal/webkit.md",
+      "sha256": "c80c4d0837943976abe5a9057d57a6a3693b0133a4a4d1c42ea634cd76725485",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/javafx.web/src/main/legal/webkit.md"
+    },
+    {
+      "path": "modules/jfx.incubator.richtext/src/main/legal/unicode-fx.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc",
+      "url": "https://raw.githubusercontent.com/openjdk/jfx25u/efe71c918f2256bd23bc38389eb759bd4c9cf525/modules/jfx.incubator.richtext/src/main/legal/unicode-fx.md"
+    }
+  ]
+}

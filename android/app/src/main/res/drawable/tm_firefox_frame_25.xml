@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mozilla Firefox loading.svg, MPL-2.0. См. assets/tm_split/FIREFOX-LICENSE.txt. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="64dp" android:height="64dp" android:viewportWidth="16" android:viewportHeight="16">
+    <path android:fillColor="#0060DF" android:pathData="M2.452 6a2 2 0 0 1 0 4 2.001 2.001 0 0 1 -2 -2 2 2 0 0 1 2 -2z" />
+</vector>

@@ -1,0 +1,39 @@
+[Unit]
+Description=Сервер SplitYTM: основной и облегчённый резервный канал
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=/etc/splitytm/server.json
+ConditionPathExists=/etc/splitytm/yandex-cookie.txt
+
+[Service]
+Type=simple
+User=splitytm
+Group=splitytm
+UMask=0077
+StateDirectory=splitytm
+StateDirectoryMode=0700
+WorkingDirectory=/var/lib/splitytm
+LoadCredential=yandex-cookie:/etc/splitytm/yandex-cookie.txt
+Environment=TM_SPLIT_STATS_FILE=/var/lib/splitytm/stats.json
+ExecStartPre=/usr/bin/splitytm-server -config /etc/splitytm/server.json -check
+ExecStart=/usr/bin/splitytm-server -config /etc/splitytm/server.json
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=30s
+KillMode=control-group
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+RestrictNamespaces=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

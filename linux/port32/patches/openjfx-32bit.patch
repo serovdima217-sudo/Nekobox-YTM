@@ -1,0 +1,314 @@
+--- a/build.gradle
++++ b/build.gradle
+@@ -350,7 +350,8 @@
+ // These variables indicate what platform is running the build. Is
+ // this build running on a Mac, Windows, or Linux machine? 32 or 64 bit?
+ ext.OS_NAME = System.getProperty("os.name").toLowerCase()
+-ext.OS_ARCH = System.getProperty("os.arch")
++// Явная целевая архитектура cross-build, без подмены архитектуры JVM.
++ext.OS_ARCH = System.getenv("YTM_FX_ARCH") ?: System.getProperty("os.arch")
+ ext.ARCH_NAME = "x64"
+ ext.IS_64 = OS_ARCH.toLowerCase().contains("64")
+ ext.IS_AARCH64 = OS_ARCH.toLowerCase().contains("aarch64")
+@@ -386,7 +387,7 @@
+         ARCH_NAME = "x64"
+     }
+ } else {
+-    ARCH_NAME = "x32"
++    ARCH_NAME = OS_ARCH.startsWith("arm") ? "arm32" : "x32"
+ }
+ 
+ // Get the JDK_HOME automatically based on the version of Java used to execute gradle. Or, if specified,
+--- a/buildSrc/linux.gradle
++++ b/buildSrc/linux.gradle
+@@ -31,7 +31,7 @@
+ 
+ // All desktop related packages should be built
+ LINUX.compileSwing = true;
+-LINUX.compileSWT = true;
++LINUX.compileSWT = false;
+ 
+ // Libraries end up in the lib/$OS_ARCH directory for Linux
+ LINUX.libDest = "lib"
+@@ -43,7 +43,7 @@
+ def commonFlags = [
+         "-fno-strict-aliasing", "-fPIC", "-fno-omit-frame-pointer", // optimization flags
+         "-fstack-protector",
+-        "-Wextra", "-Wall", "-Wformat-security", "-Wno-unused", "-Wno-parentheses", "-Werror=trampolines"] // warning flags
++        "-Wextra", "-Wall", "-Wformat-security", "-Wno-unused", "-Wno-parentheses"] // warning flags
+ 
+ if (!IS_64) {
+     commonFlags += "-m32"
+--- a/modules/javafx.graphics/src/main/native-font/freetype.c
++++ b/modules/javafx.graphics/src/main/native-font/freetype.c
+@@ -520,7 +520,7 @@
+         if (info->lenCoords > SIZE_MAX - DEFAULT_LEN_COORDS) goto fail;
+         info->lenCoords += DEFAULT_LEN_COORDS;
+ 
+-        jbyte* newPointCoords = (jfloat*)realloc(info->pointCoords, info->lenCoords * sizeof(jfloat));
++        jfloat* newPointCoords = (jfloat*)realloc(info->pointCoords, info->lenCoords * sizeof(jfloat));
+         if (newPointCoords == NULL) goto fail;
+         info->pointCoords = newPointCoords;
+     }
+--- a/modules/javafx.graphics/src/main/native-font/pango.c
++++ b/modules/javafx.graphics/src/main/native-font/pango.c
+@@ -424,7 +424,7 @@
+     (JNIEnv *env, jclass that, jlong str, jlong pos)
+ {
+     if (!str) return 0;
+-    return (jlong)g_utf8_strlen((const gchar *)str, (const gchar *)pos);
++    return (jlong)g_utf8_strlen((const gchar *)str, (gssize)pos);
+ }
+ 
+ JNIEXPORT jlong JNICALL OS_NATIVE(g_1utf16_1to_1utf8)
+--- a/modules/javafx.graphics/src/main/native-glass/gtk/GlassApplication.cpp
++++ b/modules/javafx.graphics/src/main/native-glass/gtk/GlassApplication.cpp
+@@ -550,7 +550,7 @@
+  * Signature:   (java/lang/String;)I;
+  */
+ JNIEXPORT jint JNICALL Java_com_sun_glass_ui_gtk_GtkApplication__1openURI
+-        (JNIEnv *env, jclass jClass, jstring uri)
++        (JNIEnv *env, jclass , jstring uri)
+ {
+     gboolean success = FALSE;
+     GError *error = NULL;
+--- a/modules/javafx.graphics/src/main/native-glass/gtk/glass_dnd.cpp
++++ b/modules/javafx.graphics/src/main/native-glass/gtk/glass_dnd.cpp
+@@ -631,7 +631,7 @@
+ 
+ static gboolean dnd_source_set_string(GtkWidget *widget, GtkSelectionData *data, GdkAtom atom)
+ {
+-    gboolean is_data_set;
++    gboolean is_data_set = FALSE;
+ 
+     jstring string = (jstring)dnd_source_get_data(widget, "text/plain");
+     if (!string) {
+@@ -657,7 +657,7 @@
+     return is_data_set;
+ }
+ 
+-static gboolean dnd_source_set_image(GtkWidget *widget, GtkSelectionData *data, GdkAtom atom)
++static gboolean dnd_source_set_image(GtkWidget *widget, GtkSelectionData *data, GdkAtom )
+ {
+     jobject pixels = dnd_source_get_data(widget, "application/x-java-rawimage");
+     if (!pixels) {
+@@ -668,7 +668,7 @@
+     gsize size;
+     const char * type;
+     GdkPixbuf *pixbuf = NULL;
+-    gboolean is_data_set;
++    gboolean is_data_set = FALSE;
+ 
+     mainEnv->CallVoidMethod(pixels, jPixelsAttachData, PTR_TO_JLONG(&pixbuf));
+ 
+@@ -681,7 +681,7 @@
+     return is_data_set;
+ }
+ 
+-static gboolean dnd_source_set_uri(GtkWidget *widget, GtkSelectionData *data, GdkAtom atom)
++static gboolean dnd_source_set_uri(GtkWidget *widget, GtkSelectionData *data, GdkAtom )
+ {
+     const gchar* url = NULL;
+     jstring jurl = NULL;
+@@ -701,7 +701,7 @@
+         return FALSE;
+     }
+ 
+-    gboolean is_data_set;
++    gboolean is_data_set = FALSE;
+     GString* res = g_string_new (NULL); //http://www.ietf.org/rfc/rfc2483.txt
+ 
+     if (files_cnt > 0) {
+@@ -774,9 +774,9 @@
+     return FALSE;
+ }
+ 
+-static void dnd_end_callback(GtkWidget *widget,
++static void dnd_end_callback(GtkWidget *,
+                              GdkDragContext *context,
+-                             gpointer user_data)
++                             gpointer )
+ {
+     if (drag_widget) {
+         GdkDragAction action = gdk_drag_context_get_selected_action(context);
+@@ -785,10 +785,10 @@
+     gdk_threads_add_idle((GSourceFunc) dnd_destroy_drag_widget_callback, NULL);
+ }
+ 
+-static gboolean dnd_drag_failed_callback(GtkWidget *widget,
+-                                     GdkDragContext *context,
+-                                     GtkDragResult result,
+-                                     gpointer user_data)
++static gboolean dnd_drag_failed_callback(GtkWidget *,
++                                     GdkDragContext *,
++                                     GtkDragResult ,
++                                     gpointer )
+ {
+     dnd_set_performed_action(com_sun_glass_ui_gtk_GtkDnDClipboard_ACTION_NONE);
+     gdk_threads_add_idle((GSourceFunc) dnd_destroy_drag_widget_callback, NULL);
+@@ -797,11 +797,11 @@
+ }
+ 
+ static void dnd_data_get_callback(GtkWidget *widget,
+-                                  GdkDragContext *context,
++                                  GdkDragContext *,
+                                   GtkSelectionData *data,
+-                                  guint info,
+-                                  guint time,
+-                                  gpointer user_data)
++                                  guint ,
++                                  guint ,
++                                  gpointer )
+ {
+     GdkAtom atom = gtk_selection_data_get_target(data);
+ 
+@@ -818,7 +818,7 @@
+ 
+ static void dnd_drag_begin_callback(GtkWidget *widget,
+                                     GdkDragContext *context,
+-                                    gpointer user_data)
++                                    gpointer )
+ {
+     DragView::set_drag_view(widget, context);
+ }
+--- a/modules/javafx.graphics/src/main/native-glass/gtk/glass_key.cpp
++++ b/modules/javafx.graphics/src/main/native-glass/gtk/glass_key.cpp
+@@ -371,7 +371,7 @@
+  * Signature: (I)I
+  */
+ JNIEXPORT jint JNICALL Java_com_sun_glass_ui_gtk_GtkApplication__1isKeyLocked
+-  (JNIEnv * env, jobject obj, jint keyCode)
++  (JNIEnv * , jobject , jint keyCode)
+ {
+     Display* display = gdk_x11_display_get_xdisplay(gdk_display_get_default());
+     if (!isXkbAvailable(display)) {
+--- a/modules/javafx.graphics/src/main/native-glass/gtk/glass_window.h
++++ b/modules/javafx.graphics/src/main/native-glass/gtk/glass_window.h
+@@ -259,7 +259,7 @@
+     jlong screen;
+     WindowFrameType frame_type;
+     WindowType window_type;
+-    struct WindowContext *owner;
++    WindowContext *owner;
+     WindowGeometry geometry;
+     struct _Resizable {// we can't use set/get gtk_window_resizable function
+         _Resizable(): value(true),
+--- a/modules/javafx.graphics/src/main/native-glass/gtk/glass_window_ime.cpp
++++ b/modules/javafx.graphics/src/main/native-glass/gtk/glass_window_ime.cpp
+@@ -29,6 +29,7 @@
+ 
+ #include <cstring>
+ #include <cstdlib>
++#include <vector>
+ 
+ bool WindowContextBase::hasIME() {
+     return xim.enabled;
+@@ -179,7 +180,7 @@
+         if (XIMFeedback* fb = data->text->feedback) {
+             attr = mainEnv->NewByteArray(data->text->length);
+             CHECK_JNI_EXCEPTION(mainEnv)
+-            jbyte v[data->text->length];
++            std::vector<jbyte> v(data->text->length);
+             for (int i = 0; i < data->text->length; i++) {
+                 if (fb[i] & XIMReverse) {
+                     v[i] = com_sun_glass_ui_View_IME_ATTR_TARGET_NOTCONVERTED;
+@@ -191,7 +192,7 @@
+                     v[i] = com_sun_glass_ui_View_IME_ATTR_INPUT;
+                 }
+             }
+-            mainEnv->SetByteArrayRegion(attr, 0, data->text->length, v);
++            mainEnv->SetByteArrayRegion(attr, 0, data->text->length, v.data());
+             CHECK_JNI_EXCEPTION(mainEnv)
+         }
+     }
+--- a/modules/javafx.graphics/src/main/native-prism-es2/x11/X11GLContext.c
++++ b/modules/javafx.graphics/src/main/native-prism-es2/x11/X11GLContext.c
+@@ -275,7 +275,7 @@
+                 dlsym(RTLD_DEFAULT, "glXSwapIntervalSGI");
+ 
+         if (ctxInfo->glXSwapIntervalSGI == NULL) {
+-            ctxInfo->glXSwapIntervalSGI = glXGetProcAddress("glXSwapIntervalSGI");
++            ctxInfo->glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC)glXGetProcAddress("glXSwapIntervalSGI");
+         }
+ 
+     }
+--- a/modules/javafx.web/src/main/native/Source/cmake/OptionsJava.cmake
++++ b/modules/javafx.web/src/main/native/Source/cmake/OptionsJava.cmake
+@@ -39,6 +39,11 @@
+ set(ICU_I18N_LIBRARIES icui18n icuuc icudata)
+ set(ICU_DATA_LIBRARIES icudata)
+ 
++# JVM сборщика запускает Gradle; нативная линковка использует целевой ABI.
++if (DEFINED ENV{YTM_TARGET_JAVA_HOME})
++    set(JAVA_JVM_LIBRARY "$ENV{YTM_TARGET_JAVA_HOME}/lib/server/libjvm.so" CACHE FILEPATH "Целевая JVM" FORCE)
++    set(JAVA_AWT_LIBRARY "$ENV{YTM_TARGET_JAVA_HOME}/lib/libjawt.so" CACHE FILEPATH "Целевой JAWT" FORCE)
++endif ()
+ find_package(JNI REQUIRED)
+ find_package(Threads REQUIRED)
+ # find_package(ZLIB REQUIRED)
+--- a/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gst_private.h
++++ b/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gst_private.h
+@@ -542,7 +542,12 @@
+ struct _GstClockEntryImpl
+ {
+   GstClockEntry entry;
++#if defined(GSTREAMER_LITE) && defined(LINUX)
++  /* Linux fallback в gstclock.c хранит сам GWeakRef, а не указатель на него. */
++  GWeakRef clock;
++#else
+   GWeakRef *clock;
++#endif
+   GDestroyNotify destroy_entry;
+   gpointer padding[21];                 /* padding for allowing e.g. systemclock
+                                          * to add data in lieu of overridable
+--- a/modules/javafx.media/src/main/native/gstreamer/plugins/av/videodecoder.c
++++ b/modules/javafx.media/src/main/native/gstreamer/plugins/av/videodecoder.c
+@@ -199,7 +199,7 @@
+ {
+     VideoDecoder *decoder = VIDEODECODER(object);
+ 
+-    basedecoder_close_decoder(decoder);
++    basedecoder_close_decoder(BASEDECODER(decoder));
+ 
+     G_OBJECT_CLASS(parent_class)->dispose(object);
+ }
+--- a/modules/javafx.web/src/main/native/Source/WebCore/mapfile-vers
++++ b/modules/javafx.web/src/main/native/Source/WebCore/mapfile-vers
+@@ -10,7 +10,7 @@
+                _ZN3WTF5equalEPKNS_10StringImplEPKh;
+                _ZN3WTF6StringC1EPKc;
+                _ZN3WTF6StringC1ESt4spanIKDsLm18446744073709551615EE;
+-               _ZN3WTF6StringC1ESt4spanIKDsLm18446744073709551615EE;
++               _ZN3WTF6StringC1ESt4spanIKDsLj4294967295EE;
+                _ZN3WTF6StringC1EPKDsj;
+                _ZN3WTF7RunLoop13mainSingletonEv;
+                _ZN3WTF12isMainThreadEv;
+--- a/modules/javafx.web/src/main/native/Source/WebKitLegacy/java/WebCoreSupport/FrameLoaderClientJava.cpp
++++ b/modules/javafx.web/src/main/native/Source/WebKitLegacy/java/WebCoreSupport/FrameLoaderClientJava.cpp
+@@ -254,7 +254,7 @@
+     initRefs(env);
+ 
+     JLString urlJavaString(url.toJavaString(env));
+-    env->CallVoidMethod(m_webPage, setRequestURLMID, ptr_to_jlong(f), identifier, (jstring)urlJavaString);
++    env->CallVoidMethod(m_webPage, setRequestURLMID, ptr_to_jlong(f), static_cast<jint>(identifier.toUInt64()), (jstring)urlJavaString);
+     WTF::CheckAndClearException(env);
+ }
+ 
+@@ -264,7 +264,7 @@
+     JNIEnv* env = WTF::GetJavaEnv();
+     initRefs(env);
+ 
+-    env->CallVoidMethod(m_webPage, removeRequestURLMID, ptr_to_jlong(f), identifier);
++    env->CallVoidMethod(m_webPage, removeRequestURLMID, ptr_to_jlong(f), static_cast<jint>(identifier.toUInt64()));
+     WTF::CheckAndClearException(env);
+ }
+ 
+@@ -310,7 +310,7 @@
+     JLString contentTypeJavaString(contentType.toJavaString(env));
+     // notification for resource event listeners
+     env->CallVoidMethod(m_webPage, fireResourceLoadEventMID,
+-                        ptr_to_jlong(f), state, id,
++                        ptr_to_jlong(f), state, static_cast<jint>(id.toUInt64()),
+                         (jstring)contentTypeJavaString, progress, errorCode);
+     WTF::CheckAndClearException(env);
+ }

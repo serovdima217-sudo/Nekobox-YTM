@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference app:key="profileName" app:title="Название профиля" app:useSimpleSummaryProvider="true" />
+    <EditTextPreference app:key="tmSplitLinks" app:title="Ссылки из подписки" app:dialogMessage="Вставьте ссылки Телемоста по порядку: основная и резервная. Можно вставить подписку tm-split:// или JSON. Свободная пара выбирается автоматически." app:useSimpleSummaryProvider="true" />
+</PreferenceScreen>

@@ -1,0 +1,74 @@
+[
+  {
+    "arch": "x86",
+    "component": "naiveproxy",
+    "name": "naiveproxy-v154.0.8037.49-5-linux-x86.tar.xz",
+    "url": "https://github.com/klzgrad/naiveproxy/releases/download/v154.0.8037.49-5/naiveproxy-v154.0.8037.49-5-linux-x86.tar.xz",
+    "sha256": "241a1a64e6eb36ea5698f1f17e2c75ee8ba9a2cf8f58aed91fda04902f103b59",
+    "size": 3835116,
+    "build_from_source": false
+  },
+  {
+    "arch": "x86",
+    "component": "hysteria",
+    "name": "hysteria-linux-386",
+    "url": "https://github.com/HyNetworks/hysteria/releases/download/v1.3.5/hysteria-linux-386",
+    "sha256": "92c5bbbc467867ea8074c684468833919a487cc7535d5b60e620e4c5b8375eca",
+    "size": 20373504,
+    "build_from_source": false
+  },
+  {
+    "arch": "x86",
+    "component": "trojan-go",
+    "name": "trojan-go-linux-386.zip",
+    "url": "https://github.com/p4gefau1t/trojan-go/releases/download/v0.10.6/trojan-go-linux-386.zip",
+    "sha256": "170eafa2f9ac62012c3fd4d56400e40cd4eb82316cc71f65d96271300ef6fb5a",
+    "size": 7543889,
+    "build_from_source": false
+  },
+  {
+    "arch": "armv7",
+    "component": "naiveproxy",
+    "name": "naiveproxy-v154.0.8037.49-5-openwrt-arm_cortex-a9-static.tar.xz",
+    "url": "https://github.com/klzgrad/naiveproxy/releases/download/v154.0.8037.49-5/naiveproxy-v154.0.8037.49-5-openwrt-arm_cortex-a9-static.tar.xz",
+    "sha256": "0e1226f8e6eb1335a9010bfe7fbb07c0ce444177cbb724991b6357057891db02",
+    "size": 3799520,
+    "build_from_source": false
+  },
+  {
+    "arch": "armv7",
+    "component": "hysteria",
+    "name": "hysteria-linux-arm",
+    "url": "https://github.com/HyNetworks/hysteria/releases/download/v1.3.5/hysteria-linux-arm",
+    "sha256": "77cd7103fbe0430ba63424059b676300663f7f760716f824de4c8fa9345e819a",
+    "size": 20250624,
+    "build_from_source": false
+  },
+  {
+    "arch": "armv7",
+    "component": "trojan-go",
+    "name": "trojan-go-linux-armv7.zip",
+    "url": "https://github.com/p4gefau1t/trojan-go/releases/download/v0.10.6/trojan-go-linux-armv7.zip",
+    "sha256": "76f20f41813df8dfc7bca46c838b99480ebfdcfac27e47cf39a54aff27518320",
+    "size": 7485747,
+    "build_from_source": false
+  },
+  {
+    "arch": "armv7",
+    "component": "mieru",
+    "name": "mieru_3.39.0_linux_armv7.tar.gz",
+    "url": "https://github.com/enfein/mieru/releases/download/v3.39.0/mieru_3.39.0_linux_armv7.tar.gz",
+    "sha256": "e82dd1f5bc17e062b3b1239fe639573575498b4ddfecb5f67391933fad0c37a8",
+    "size": 5048746,
+    "build_from_source": false
+  },
+  {
+    "arch": "x86",
+    "component": "mieru",
+    "name": "mieru-v3.39.0-source.tar.gz",
+    "url": "https://codeload.github.com/enfein/mieru/tar.gz/refs/tags/v3.39.0",
+    "sha256": "434198ea0558bc440379e9a0a97f6904ba8dd6b213dd6fb9d578388eba7d2f12",
+    "size": 1225444,
+    "build_from_source": true
+  }
+]

@@ -1,0 +1,122 @@
+--- a/skiko/buildSrc/src/main/kotlin/SkiaTarget.kt
++++ b/skiko/buildSrc/src/main/kotlin/SkiaTarget.kt
+@@ -13,6 +13,8 @@
+         get() = when (this) {
+             Arch.X64 -> "x64"
+             Arch.Arm64 -> "arm64"
++            Arch.X86 -> "x86"
++            Arch.Arm32 -> "arm32"
+             Arch.Wasm -> "wasm"
+         }
+ 
+@@ -20,6 +22,8 @@
+         get() = when (this) {
+             Arch.X64 -> "X64"
+             Arch.Arm64 -> "Arm64"
++            Arch.X86 -> "X86"
++            Arch.Arm32 -> "Arm32"
+             Arch.Wasm -> "Wasm"
+         }
+ 
+--- a/skiko/buildSrc/src/main/kotlin/properties.kt
++++ b/skiko/buildSrc/src/main/kotlin/properties.kt
+@@ -42,6 +42,8 @@
+         OS.Linux -> when (arch) {
+             Arch.X64 -> "g++"
+             Arch.Arm64 -> if (hostArch == Arch.Arm64) "g++" else "aarch64-linux-gnu-g++"
++            Arch.X86 -> System.getenv("SKIKO_CXX_X86") ?: "i686-linux-gnu-g++"
++            Arch.Arm32 -> System.getenv("SKIKO_CXX_ARM32") ?: "arm-linux-gnueabihf-g++"
+             Arch.Wasm -> "Unexpected combination: $os & $arch"
+         }
+         OS.Android -> "clang++"
+@@ -65,6 +67,8 @@
+ enum class Arch(val id: String) {
+     X64("x64"),
+     Arm64("arm64"),
++    X86("x86"),
++    Arm32("arm32"),
+     Wasm("wasm");
+ 
+     companion object {
+--- a/skiko/buildSrc/src/main/kotlin/tasks/configuration/JvmTasksConfiguration.kt
++++ b/skiko/buildSrc/src/main/kotlin/tasks/configuration/JvmTasksConfiguration.kt
+@@ -296,8 +296,12 @@
+                         "$skiaBinDir/libjsonreader.a"
+                     )
+                 )
+-                if (targetArch == Arch.Arm64) {
++                if (targetArch in setOf(Arch.Arm64, Arch.X86, Arch.Arm32)) {
+                     add("-lEGL")
++                }
++                if (targetArch in setOf(Arch.X86, Arch.Arm32)) {
++                    // 32-битный runtime может требовать отдельную реализацию 64-битных атомиков.
++                    add("-latomic")
+                 }
+             }.toTypedArray()
+         }
+@@ -396,7 +400,7 @@
+     outDir.set(project.layout.buildDirectory.dir("maybe-signed-$target"))
+ 
+     val toolsDir = project.layout.projectDirectory.dir("tools")
+-    if (targetOs == OS.Linux) {
++    if (targetOs == OS.Linux && targetArch in setOf(Arch.X64, Arch.Arm64)) {
+         // Linux requires additional sealing to run on wider set of platforms.
+         // See https://github.com/olonho/sealer.
+         when (targetArch) {
+--- a/skiko/src/awtMain/cpp/include/jni_helpers.h
++++ b/skiko/src/awtMain/cpp/include/jni_helpers.h
+@@ -1,3 +1,4 @@
++#include <type_traits>
+ #pragma once
+ 
+ #include <cstdint>
+@@ -5,10 +6,25 @@
+ #include <jni.h>
+ 
+ template<typename T>
+-T inline fromJavaPointer(jlong ptr) { return reinterpret_cast<T>(static_cast<uintptr_t>(ptr)); }
++T inline fromJavaPointer(jlong ptr) {
++    // X11 Window — целое число, а Display и другие объекты — указатели.
++    if constexpr (std::is_pointer_v<T>) {
++        return reinterpret_cast<T>(static_cast<uintptr_t>(ptr));
++    } else {
++        return static_cast<T>(ptr);
++    }
++}
+ 
+ template<typename T>
+-jlong inline toJavaPointer(T ptr) { return static_cast<jlong>(reinterpret_cast<uintptr_t>(ptr)); }
++jlong inline toJavaPointer(T ptr) {
++    if constexpr (std::is_null_pointer_v<T>) {
++        return 0;
++    } else if constexpr (std::is_pointer_v<T>) {
++        return static_cast<jlong>(reinterpret_cast<uintptr_t>(ptr));
++    } else {
++        return static_cast<jlong>(ptr);
++    }
++}
+ 
+ std::wstring inline toStdString(JNIEnv *env, jstring jstr) {
+     const jchar* jchars = env->GetStringCritical(jstr, NULL);
+--- a/skiko/src/commonMain/kotlin/org/jetbrains/skiko/OsArch.kt
++++ b/skiko/src/commonMain/kotlin/org/jetbrains/skiko/OsArch.kt
+@@ -23,6 +23,8 @@
+ enum class Arch(val id: String) {
+     X64("x64"),
+     Arm64("arm64"),
++    X86("x86"),
++    Arm32("arm32"),
+     Unknown("unknown"),
+     ;
+ }
+--- a/skiko/src/jvmMain/kotlin/org/jetbrains/skiko/OsArch.jvm.kt
++++ b/skiko/src/jvmMain/kotlin/org/jetbrains/skiko/OsArch.jvm.kt
+@@ -16,6 +16,8 @@
+     when (osArch) {
+         "x86_64", "amd64" -> Arch.X64
+         "aarch64" -> Arch.Arm64
++        "x86", "i386", "i486", "i586", "i686" -> Arch.X86
++        "arm", "arm32", "armv7l", "armhf" -> Arch.Arm32
+         else -> throw Error("Unknown arch $osArch")
+     }
+ }

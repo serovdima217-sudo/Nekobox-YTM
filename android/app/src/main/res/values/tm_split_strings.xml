@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tm_split_connecting" translatable="false">Установка соединения</string>
+    <string name="tm_split_protocol" translatable="false">SplitYTM</string>
+</resources>

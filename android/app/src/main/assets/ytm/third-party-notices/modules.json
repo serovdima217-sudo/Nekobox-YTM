@@ -1,0 +1,217 @@
+[
+  {
+    "модуль": "github.com/andybalholm/brotli",
+    "версия": "v1.1.1",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/google/uuid",
+    "версия": "v1.6.0",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/klauspost/compress",
+    "версия": "v1.17.11",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/klauspost/cpuid/v2",
+    "версия": "v2.2.6",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/klauspost/reedsolomon",
+    "версия": "v1.12.0",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/kulikov0/headless-client",
+    "версия": "v0.1.0",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/datachannel",
+    "версия": "v1.6.0",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/dtls/v3",
+    "версия": "v3.1.2",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/interceptor",
+    "версия": "v0.1.44",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/logging",
+    "версия": "v0.2.4",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/mdns/v2",
+    "версия": "v2.1.0",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/randutil",
+    "версия": "v0.1.0",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/rtcp",
+    "версия": "v1.2.16",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/rtp",
+    "версия": "v1.10.1",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/sctp",
+    "версия": "v1.9.4",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/sdp/v3",
+    "версия": "v3.0.18",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/srtp/v3",
+    "версия": "v3.0.10",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/stun/v3",
+    "версия": "v3.1.1",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/transport/v4",
+    "версия": "v4.1.0",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pion/turn/v4",
+    "версия": "v4.1.4",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/pkg/errors",
+    "версия": "v0.9.1",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/refraction-networking/utls",
+    "версия": "v1.8.2",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/tjfoc/gmsm",
+    "версия": "v1.4.1",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/wlynxg/anet",
+    "версия": "v0.0.5",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "github.com/xtaci/kcp-go/v5",
+    "версия": "v5.6.72",
+    "уведомления": [
+      "LICENSE"
+    ]
+  },
+  {
+    "модуль": "golang.org/x/crypto",
+    "версия": "v0.51.0",
+    "уведомления": [
+      "LICENSE",
+      "PATENTS"
+    ]
+  },
+  {
+    "модуль": "golang.org/x/net",
+    "версия": "v0.55.0",
+    "уведомления": [
+      "LICENSE",
+      "PATENTS"
+    ]
+  },
+  {
+    "модуль": "golang.org/x/sys",
+    "версия": "v0.45.0",
+    "уведомления": [
+      "LICENSE",
+      "PATENTS"
+    ]
+  },
+  {
+    "модуль": "golang.org/x/text",
+    "версия": "v0.37.0",
+    "уведомления": [
+      "LICENSE",
+      "PATENTS"
+    ]
+  },
+  {
+    "модуль": "golang.org/x/time",
+    "версия": "v0.14.0",
+    "уведомления": [
+      "LICENSE",
+      "PATENTS"
+    ]
+  }
+]

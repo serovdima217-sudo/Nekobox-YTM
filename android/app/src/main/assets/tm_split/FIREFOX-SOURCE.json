@@ -1,0 +1,7 @@
+{
+  "источник": "https://github.com/mozilla/gecko-dev/blob/master/browser/themes/shared/tabbrowser/loading.svg",
+  "SVG_SHA256": "78c47a324c1e8571ebdbbd27bf6dbd2714c47f0ec991d41efde1ff8a055ea378",
+  "кадров": 30,
+  "миллисекунд_на_кадр": 35,
+  "перерисовки_геометрии_не_было": true
+}
