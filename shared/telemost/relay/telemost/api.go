@@ -17,6 +17,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"whitelist-bypass/relay/common"
+
 	"github.com/kulikov0/headless-client"
 	"github.com/kulikov0/headless-client/webrtc"
 	"github.com/pion/interceptor"
@@ -261,7 +263,7 @@ func (c *Client) Do(method, path string, body interface{}) ([]byte, int, error) 
 	}
 	client := c.HTTP
 	if client == nil {
-		client = &http.Client{Timeout: 20 * time.Second, Transport: headless.ChromeWindows.Transport(headless.TLSOptions{})}
+		client = &http.Client{Timeout: 20 * time.Second, Transport: common.ChromeTransport(headless.TLSOptions{})}
 	}
 	resp, err := client.Do(req)
 	if err != nil {

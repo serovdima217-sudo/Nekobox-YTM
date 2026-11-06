@@ -179,7 +179,7 @@ func NewSession(httpClient *http.Client) (*Session, error) {
 		if err != nil {
 			return nil, fmt.Errorf("cookiejar: %w", err)
 		}
-		httpClient = &http.Client{Jar: jar, Transport: headless.ChromeWindows.HTTPClient().Transport}
+		httpClient = &http.Client{Jar: jar, Transport: common.ChromeHTTPClient().Transport}
 	} else if httpClient.Jar == nil {
 		jar, err := cookiejar.New(nil)
 		if err != nil {

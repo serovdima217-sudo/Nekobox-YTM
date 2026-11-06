@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"whitelist-bypass/relay/common"
 
 	"github.com/kulikov0/headless-client"
 )
@@ -83,7 +84,7 @@ func httpDo(client *http.Client, req *http.Request) (*http.Response, error) {
 		}
 	}
 	if client == nil {
-		client = headless.ChromeWindows.HTTPClient()
+		client = common.ChromeHTTPClient()
 	}
 	return client.Do(req)
 }
@@ -272,7 +273,7 @@ func SetParticipantPermissions(client *http.Client, accessToken, roomID, partici
 
 func KickParticipant(client *http.Client, accessToken, roomID, participantID string) error {
 	if client == nil {
-		client = headless.ChromeWindows.HTTPClient()
+		client = common.ChromeHTTPClient()
 	}
 	kickURL := fmt.Sprintf("%s/api-room-manager/api/v1/room/%s/participant/%s/kick", APIBase, roomID, participantID)
 	req, err := http.NewRequest("DELETE", kickURL, strings.NewReader("{}"))

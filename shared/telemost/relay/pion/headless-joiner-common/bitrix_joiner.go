@@ -254,7 +254,7 @@ func (j *BitrixHeadlessJoiner) runOnce() error {
 }
 
 func (j *BitrixHeadlessJoiner) makeTransport() http.RoundTripper {
-	return headless.ChromeWindows.Transport(headless.TLSOptions{
+	return common.ChromeTransport(headless.TLSOptions{
 		DialContext:        resolvingDialContext(j.ResolveFn),
 		InsecureSkipVerify: true,
 	})

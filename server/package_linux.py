@@ -2,7 +2,7 @@
 SPDX-License-Identifier: GPL-3.0-or-later
 """
 from pathlib import Path
-import argparse,os,io,json,hashlib,tarfile,gzip,subprocess,shutil,time,struct,re
+import argparse,shutil,os,io,json,hashlib,tarfile,gzip,subprocess,shutil,time,struct,re
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--arch',required=True,choices=['x86_64','aarch64','armv7','x86'])
@@ -42,7 +42,9 @@ def ar(parts):
   if len(data)%2:result.extend(b'\n')
  return result
 
-entries={'usr/bin/splitytm-server':(raw,0o755),'usr/lib/systemd/system/splitytm-server.service':((R/'server/systemd/splitytm-server.service').read_bytes(),0o644),'usr/lib/sysusers.d/splitytm.conf':((R/'server/systemd/splitytm.conf').read_bytes(),0o644),'etc/splitytm/server.json':((R/'examples/server.json').read_bytes(),0o640),'usr/share/doc/splitytm-server/СЕРВЕР.md':((R/'docs/СЕРВЕР.md').read_bytes(),0o644),'usr/share/licenses/splitytm-server/COPYING':((R/'LICENSE').read_bytes(),0o644),'usr/share/licenses/splitytm-server/NOTICE.md':((R/'NOTICE.md').read_bytes(),0o644)}
+doc_src=R/'docs/СЕРВЕР.md' if (R/'docs/СЕРВЕР.md').is_file() else R/'README.md'
+notice_src=R/'NOTICE.md' if (R/'NOTICE.md').is_file() else R/'shared/telemost/NOTICE.md'
+entries={'usr/bin/splitytm-server':(raw,0o755),'usr/lib/systemd/system/splitytm-server.service':((R/'server/systemd/splitytm-server.service').read_bytes(),0o644),'usr/lib/sysusers.d/splitytm.conf':((R/'server/systemd/splitytm.conf').read_bytes(),0o644),'etc/splitytm/server.json':((R/'examples/server.json').read_bytes(),0o640),'usr/share/doc/splitytm-server/'+doc_src.name:(doc_src.read_bytes(),0o644),'usr/share/licenses/splitytm-server/COPYING':((R/'LICENSE').read_bytes(),0o644),'usr/share/licenses/splitytm-server/NOTICE.md':(notice_src.read_bytes(),0o644)}
 for f in(R/'LICENSES').rglob('*'):
  if f.is_file():
   assert not f.is_symlink(),'Симлинк в лицензиях требует отдельной проверки'
@@ -77,7 +79,17 @@ backup = etc/splitytm/server.json
 '''
 pe=entries.copy();pe['.PKGINFO']=(info.encode(),0o644);pe['.INSTALL']=(install,0o644)
 pac=O/f'splitytm-server-{V}-1-{pacarch}.pkg.tar.zst'
-with pac.open('wb')as out:subprocess.run(['zstd','-q','-T2','-10','-c'],input=tar_bytes(pe),stdout=out,check=True)
+raw_pac = tar_bytes(pe)
+if shutil.which('zstd'):
+    with pac.open('wb') as out:
+        subprocess.run(['zstd', '-q', '-T2', '-10', '-c'], input=raw_pac, stdout=out, check=True)
+else:
+    try:
+        from compression import zstd as _pyzstd  # Python 3.14+
+        pac.write_bytes(_pyzstd.compress(raw_pac, level=10))
+    except ImportError:
+        import zstandard as _zstd
+        pac.write_bytes(_zstd.ZstdCompressor(level=10, threads=2).compress(raw_pac))
 standalone=O/f'splitytm-server-{V}-linux-{arch}'
 if binary!=standalone:shutil.copy2(binary,standalone)
 standalone.chmod(0o755)
@@ -85,7 +97,7 @@ standalone.chmod(0o755)
 for f in(R/'LICENSES').rglob('*'):
  if f.is_file():
   target=O/'LICENSES'/f.relative_to(R/'LICENSES');target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,target);target.chmod(0o644)
-for source,name in [(R/'LICENSE','COPYING'),(R/'NOTICE.md','NOTICE.md'),(R/'docs/СЕРВЕР.md','СЕРВЕР.md'),(R/'examples/server.json','server-example.json')]:
+for source,name in [(R/'LICENSE','COPYING'),(notice_src,'NOTICE.md'),(doc_src,doc_src.name),(R/'examples/server.json','server-example.json')]:
  target=O/name
  if source.resolve()!=target.resolve():shutil.copyfile(source,target);target.chmod(0o644)
 records=[]

@@ -301,7 +301,7 @@ func runManaged(path string, check bool) error {
 	defer cancel()
 	cfg := fetchConfig()
 	// Один HTTP/2-пул обслуживает все комнаты; отдельный TLS-пул на каждый опрос накапливает память.
-	cfg.HTTP = &http.Client{Timeout: 20 * time.Second, Transport: headless.ChromeWindows.Transport(headless.TLSOptions{})}
+	cfg.HTTP = &http.Client{Timeout: 20 * time.Second, Transport: common.ChromeTransport(headless.TLSOptions{})}
 	defer cfg.HTTP.CloseIdleConnections()
 	backend := &telemostBackend{cookie: cookie, cfg: cfg, duplicate: time.Duration(c.DuplicateMS) * time.Millisecond, joinInterval: time.Duration(c.JoinIntervalMS) * time.Millisecond}
 	if c.BondSize > 0 {

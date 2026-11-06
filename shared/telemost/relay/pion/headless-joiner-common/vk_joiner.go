@@ -303,7 +303,7 @@ func (h *VKHeadlessJoiner) joinCall() error {
 
 	client := &http.Client{
 		Timeout: 15 * time.Second,
-		Transport: headless.ChromeWindows.Transport(headless.TLSOptions{
+		Transport: common.ChromeTransport(headless.TLSOptions{
 			ServerName:         parsed.Hostname(),
 			InsecureSkipVerify: true,
 			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {

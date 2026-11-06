@@ -8,8 +8,13 @@ package common
 import (
 	"encoding/json"
 	"log"
+	"net/http"
 	"os"
+	"reflect"
 	"strings"
+	"unsafe"
+
+	"github.com/kulikov0/headless-client"
 )
 
 const bodySnippetLimit = 300
@@ -100,4 +105,41 @@ func FilterCookies(cookieHeader string, allow []string) string {
 		}
 	}
 	return strings.Join(out, "; ")
+}
+
+// ChromeTransport создаёт HTTP-транспорт с профилем браузера и безопасно инициализирует
+// внутренний пул HTTP/2 при сборке компилятором Go 1.27+ без тега http2legacy.
+func ChromeTransport(options headless.TLSOptions) http.RoundTripper {
+	rt := headless.ChromeWindows.Transport(options)
+	initEmbeddedHTTP2Transport(rt)
+	return rt
+}
+
+// ChromeHTTPClient возвращает HTTP-клиент с инициализированным транспортом ChromeWindows.
+func ChromeHTTPClient() *http.Client {
+	c := headless.ChromeWindows.HTTPClient()
+	initEmbeddedHTTP2Transport(c.Transport)
+	return c
+}
+
+func initEmbeddedHTTP2Transport(rt http.RoundTripper) {
+	if rt == nil {
+		return
+	}
+	v := reflect.ValueOf(rt)
+	if v.Kind() != reflect.Pointer || v.IsNil() {
+		return
+	}
+	elem := v.Elem()
+	if elem.Kind() != reflect.Struct {
+		return
+	}
+	f := elem.FieldByName("http2Transport")
+	if !f.IsValid() || !f.CanAddr() {
+		return
+	}
+	ptr := reflect.NewAt(f.Type(), unsafe.Pointer(f.UnsafeAddr()))
+	if closer, ok := ptr.Interface().(interface{ CloseIdleConnections() }); ok {
+		closer.CloseIdleConnections()
+	}
 }

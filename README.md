@@ -77,7 +77,7 @@ sudo systemctl restart splitytm-server
 
 ```sh
 cd shared/telemost
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags='-s -w' -o splitytm-server ./headless/telemost
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags http2legacy -trimpath -ldflags='-s -w' -o splitytm-server ./headless/telemost
 ```
 
 Флаги для других архитектур:

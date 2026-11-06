@@ -17,7 +17,7 @@ esac
 mkdir -p bin logs
 if [[ -n "${BUILD_REPOSITORY:-}" ]]; then export GOPROXY="$BUILD_REPOSITORY/go"; fi
 (cd "$root/shared/sing-box" && go build -trimpath -tags 'with_quic,with_wireguard,with_utls,with_clash_api,with_gvisor,with_grpc' -ldflags='-s -w' -o "$root/linux/bin/nekobox-core" ./cmd/sing-box)
-(cd "$root/shared/telemost" && go build -trimpath -ldflags='-s -w' -o "$root/linux/bin/ytm-client" ./cmd/tm-split-client)
+(cd "$root/shared/telemost" && go build -tags http2legacy -trimpath -ldflags='-s -w' -o "$root/linux/bin/ytm-client" ./cmd/tm-split-client)
 go build -trimpath -ldflags='-s -w' -o bin/linux-supervisor native/linux-supervisor.go
 # Для cross-build компилятор и pkg-config должны смотреть в целевой sysroot.
 if [[ "$GOARCH" != "$(go env GOHOSTARCH)" && -z "${CXX:-}" ]]; then

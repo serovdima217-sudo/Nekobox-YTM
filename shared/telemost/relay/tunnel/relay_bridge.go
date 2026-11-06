@@ -483,6 +483,12 @@ func (rb *RelayBridge) connectTCP(connID uint32, addr string) {
 		rb.send(connID, MsgConnectErr, []byte(common.ErrPrivateDst.Error()))
 		return
 	}
+	addr = resolveMinecraftSRV(addr, rb.logFn)
+	if common.DstBlocked(addr) {
+		rb.logFn("relay: CONNECT %d blocked SRV target %s", connID, common.MaskAddr(addr))
+		rb.send(connID, MsgConnectErr, []byte(common.ErrPrivateDst.Error()))
+		return
+	}
 	var conn net.Conn
 	var err error
 	if rb.upstream != nil {

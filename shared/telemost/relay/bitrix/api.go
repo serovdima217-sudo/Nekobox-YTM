@@ -110,7 +110,7 @@ func NewClient(portal, userAgent string) (*Client, error) {
 		return nil, err
 	}
 	return &Client{
-		HTTP:       &http.Client{Jar: jar, Transport: headless.ChromeWindows.HTTPClient().Transport},
+		HTTP:       &http.Client{Jar: jar, Transport: common.ChromeHTTPClient().Transport},
 		LogFn:      log.Printf,
 		portal:     strings.TrimRight(portal, "/"),
 		userAgent:  userAgent,

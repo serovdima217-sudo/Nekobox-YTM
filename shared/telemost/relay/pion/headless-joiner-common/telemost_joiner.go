@@ -313,7 +313,7 @@ func (j *TelemostHeadlessJoiner) tlsOptions() headless.TLSOptions {
 func (j *TelemostHeadlessJoiner) makeHTTPClient() *http.Client {
 	return &http.Client{
 		Timeout:   15 * time.Second,
-		Transport: headless.ChromeWindows.Transport(j.tlsOptions()),
+		Transport: common.ChromeTransport(j.tlsOptions()),
 	}
 }
 

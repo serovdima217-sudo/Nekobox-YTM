@@ -12,6 +12,8 @@ import (
 	"time"
 	"whitelist-bypass/relay/netprotect"
 
+	"whitelist-bypass/relay/common"
+
 	"github.com/kulikov0/headless-client"
 )
 
@@ -38,6 +40,6 @@ func resolvingDialContext(resolveFn ResolveFunc) func(ctx context.Context, netwo
 func resolvingHTTPClient(resolveFn ResolveFunc) *http.Client {
 	return &http.Client{
 		Timeout:   60 * time.Second,
-		Transport: headless.ChromeWindows.Transport(headless.TLSOptions{DialContext: resolvingDialContext(resolveFn)}),
+		Transport: common.ChromeTransport(headless.TLSOptions{DialContext: resolvingDialContext(resolveFn)}),
 	}
 }

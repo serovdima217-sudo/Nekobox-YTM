@@ -17,6 +17,8 @@ import (
 	"strings"
 	"time"
 
+	"whitelist-bypass/relay/common"
+
 	headless "github.com/kulikov0/headless-client"
 )
 
@@ -50,7 +52,7 @@ func RunVKAuth(joinLink string, displayName string, logFn func(string, ...any), 
 			return dialer.DialContext(ctx, network, net.JoinHostPort(resolvedIP, port))
 		}
 	}
-	client := &http.Client{Timeout: 60 * time.Second, Transport: headless.ChromeWindows.Transport(tlsOptions)}
+	client := &http.Client{Timeout: 60 * time.Second, Transport: common.ChromeTransport(tlsOptions)}
 
 	httpPost := func(targetURL string, form url.Values, extraHeaders map[string]string) (map[string]interface{}, error) {
 		req, _ := http.NewRequest("POST", targetURL, strings.NewReader(form.Encode()))

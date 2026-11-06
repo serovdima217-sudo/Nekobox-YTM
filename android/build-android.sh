@@ -16,7 +16,7 @@ export PATH="$tools:$JAVA_HOME/bin:$PATH" GOBIND="$tools/gobind"
 for spec in 'armeabi-v7a arm armv7a-linux-androideabi23' 'arm64-v8a arm64 aarch64-linux-android23' 'x86 386 i686-linux-android23' 'x86_64 amd64 x86_64-linux-android23'; do
  read -r abi arch target <<< "$spec"
  mkdir -p "app/src/main/jniLibs/$abi"
- (cd "$root/shared/telemost" && CGO_ENABLED=1 GOOS=android GOARCH="$arch" GOARM=7 GO386=softfloat CC="$cc/$target-clang" CXX="$cc/$target-clang++" go build -trimpath -buildmode=pie '-ldflags=-s -w -checklinkname=0 -extldflags=-Wl,-z,max-page-size=16384' -o "$root/android/app/src/main/jniLibs/$abi/libtm-split.so" ./cmd/tm-split-client)
+ (cd "$root/shared/telemost" && CGO_ENABLED=1 GOOS=android GOARCH="$arch" GOARM=7 GO386=softfloat CC="$cc/$target-clang" CXX="$cc/$target-clang++" go build -tags http2legacy -trimpath -buildmode=pie '-ldflags=-s -w -checklinkname=0 -extldflags=-Wl,-z,max-page-size=16384' -o "$root/android/app/src/main/jniLibs/$abi/libtm-split.so" ./cmd/tm-split-client)
 done
 (cd libcore && go mod tidy)
 for tool in gomobile gobind; do

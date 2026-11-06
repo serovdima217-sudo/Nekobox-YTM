@@ -279,7 +279,7 @@ func apiDo(client *http.Client, method, path, bearer string, body any) ([]byte, 
 	request.Header.Set("Referer", Origin+"/")
 	request.Header.Set("X-User-Agent", ClientUserAgent)
 	if client == nil {
-		client = headless.ChromeWindows.HTTPClient()
+		client = common.ChromeHTTPClient()
 	}
 	response, err := client.Do(request)
 	if err != nil {

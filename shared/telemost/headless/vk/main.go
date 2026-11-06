@@ -118,7 +118,7 @@ func httpPost(endpoint string, form url.Values, extraHeaders map[string]string) 
 	for k, v := range extraHeaders {
 		req.Header.Set(k, v)
 	}
-	resp, err := headless.ChromeWindows.HTTPClient().Do(req)
+	resp, err := common.ChromeHTTPClient().Do(req)
 	if err != nil {
 		return nil, err
 	}

@@ -16,6 +16,8 @@ import (
 	"strings"
 	"time"
 
+	"whitelist-bypass/relay/common"
+
 	"github.com/kulikov0/headless-client"
 )
 
@@ -134,7 +136,7 @@ func tmHttpGet(endpoint string, dest headless.RequestDest) ([]byte, error) {
 	if dest == headless.DestScript {
 		request.Header.Set("Referer", "https://telemost.yandex.ru/")
 	}
-	response, err := (&http.Client{Timeout: 20 * time.Second, Transport: headless.ChromeWindows.Transport(headless.TLSOptions{})}).Do(request)
+	response, err := (&http.Client{Timeout: 20 * time.Second, Transport: common.ChromeTransport(headless.TLSOptions{})}).Do(request)
 	if err != nil {
 		return nil, err
 	}
